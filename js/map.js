@@ -62,7 +62,7 @@ var getUniqueFeatures = function (array) {
   for (var i = 0; i < array.length; i++) {
     var item = array[i];
     if (uniqueFeatures[item] !== 1) {
-      uniqueFeatures[item] === 1;
+      uniqueFeatures[item] = 1;
       resultUniqueFeatures.push(item);
     }
   }
@@ -185,7 +185,7 @@ var renderCardHouse = function (flat) {
   var cardHouse = templateCardHouse.cloneNode(true);
   var features = cardHouse.querySelector('.popup__features');
   var flatType = cardHouse.querySelector('.popup__type');
-  var photo = cardHouse.querySelector('.popup_photos');
+  var photo = cardHouse.querySelector('.popup__photos');
   var photoFragment = document.createDocumentFragment();
   var featuresFragment = document.createDocumentFragment();
 
@@ -195,7 +195,7 @@ var renderCardHouse = function (flat) {
   flatType.textContent = flat.offer.type;
   flatType.textContent = TYPE[flat.offer.type];
   cardHouse.querySelector('.popup__text--capacity').textContent = flat.offer.rooms + ' комнаты для ' + flat.offer.guests + ' гостей';
-  cardHouse.querySelector('.popup__text--time').textContent = 'Заезд после ' + flats.offer.checkin + ', выезд до ' + flats.offer.checkout;
+  cardHouse.querySelector('.popup__text--time').textContent = 'Заезд после ' + flat.offer.checkin + ', выезд до ' + flat.offer.checkout;
   cardHouse.querySelector('.popup__description').textContent = flat.offer.description;
   features.textContent = '';
   photo.textContent = '';
@@ -203,11 +203,11 @@ var renderCardHouse = function (flat) {
 
   // Вставляем features
 
-  for (var j = 0; j < flat.features.offer.length; j++) {
-    var li = document.createElement('li');
-    li.className = 'feature feature--' + flat.offer.features[j];
+  flat.offer.features.forEach(function (li) {
+    li = document.createElement('li');
+    li.className = 'feature feature--';
     featuresFragment.appendChild(li);
-  }
+  });
   features.appendChild(featuresFragment);
   features.textContent = flat.offer.description;
   document.querySelector('.map').appendChild(cardHouse);
@@ -215,18 +215,18 @@ var renderCardHouse = function (flat) {
   // Вставляем photos
 
   var photoInsert = function () {
-    for (var k = 0; k < flat.offer.photos.length; k++) {
+    flat.offer.photos.forEach(function (li) {
       li = document.createElement('li');
       var img = document.createElement('img');
       img.weight = 70;
       img.height = 70;
       li.appendChild(img);
-      img.src = flat.offer.photos[k];
+      img.src = flat.offer.photos[li];
       photoFragment.appendChild(li);
-    }
+    });
     photo.appendChild(photoFragment);
   };
   photoInsert();
 };
 
-renderCardHouse(flats[1]);
+renderCardHouse(flats[0]);
