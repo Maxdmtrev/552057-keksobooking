@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Максим Дмитриев](https://up.htmlacademy.ru/javascript/13/user/552057).
-* Наставник: `Неизвестно`.
+* Наставник: [Кирилл Пензин](https://htmlacademy.ru/profile/id91821).
 
 ---
 
