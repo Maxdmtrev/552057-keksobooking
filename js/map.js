@@ -83,13 +83,14 @@ var getRandomFeatures = function (array) {
 // Функция для сортировки фото в случайном порядке
 
 var randomArray = function (array) {
-  for (var i = array.lenght - 1; i >= 0; i--) {
-    var randArrayInd = Math.floor(Math.random * (i + 1));
-    var itemArrayInd = array[randArrayInd];
-    array[randArrayInd] = array[i];
-    array[i] = itemArrayInd;
+  var arrCopy = array.slice();
+  var result = [];
+  for (var i = arrCopy.length - 1; i >= 0; i--) {
+    var randomArrayIndex = Math.floor(Math.random() * (i + 1));
+    result.push(arrCopy[randomArrayIndex]);
+    arrCopy.splice(randomArrayIndex, 1);
   }
-  return array;
+  return result;
 };
 
 // Вставляем сгенерированные квартиры сюда
