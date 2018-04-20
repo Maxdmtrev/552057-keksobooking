@@ -83,6 +83,7 @@ var getRandomFeatures = function (array) {
 // Функция для сортировки фото в случайном порядке
 
 var randomArray = function (array) {
+<<<<<<< HEAD
   var arrayCopy = array.slice();
   var result = [];
   for (var i = 0; i < arrayCopy.length; i++) {
@@ -91,6 +92,15 @@ var randomArray = function (array) {
     arrayCopy.splice(randArrayInd, 1); // Здесь возможно придется дописать код
   }
   return result;
+=======
+  for (var i = array.lenght - 1; i >= 0; i--) {
+    var randArrayInd = Math.floor(Math.random * (i + 1));
+    var itemArrayInd = array[randArrayInd];
+    array[randArrayInd] = array[i];
+    array[i] = itemArrayInd;
+  }
+  return array;
+>>>>>>> master
 };
 
 // Вставляем сгенерированные квартиры сюда
@@ -115,10 +125,17 @@ var getVariantsFlats = function () {
         type: getRandomItem(HOUSE_TYPE),
         rooms: getRandomNumber(1, 5),
         guests: getRandomNumber(1, 10),
+<<<<<<< HEAD
         checkin: getRandomNumber(HOUSE_CHECKIN_CHECKOUT),
         checkout: getRandomNumber(HOUSE_CHECKIN_CHECKOUT),
         features: getRandomFeatures(HOUSE_FEATURES),
         description: ' ',
+=======
+        checkin: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
+        checkout: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
+        features: getRandomFeatures(HOUSE_FEATURES),
+        description: '',
+>>>>>>> master
         photos: randomArray(HOUSE_PHOTOS)
       },
 
@@ -189,6 +206,7 @@ var renderCardHouse = function (flat) {
   var photoFragment = document.createDocumentFragment();
   var featuresFragment = document.createDocumentFragment();
 
+<<<<<<< HEAD
   cardHouse.querySelector('.popup__title').textContent = flat.offer.title;
   cardHouse.querySelector('.popup__text--address').textContent = flat.offer.adress;
   cardHouse.querySelector('.popup__text--price').textContent = flat.offer.price + '₽/ночь';
@@ -210,10 +228,33 @@ var renderCardHouse = function (flat) {
   });
   features.appendChild(featuresFragment);
   features.textContent = flat.offer.description;
+=======
+  cardHouse.querySelector('.popup__avatar').src = flat.author.avatar;
+  cardHouse.querySelector('.popup__title').textContent = flat.offer.title;
+  cardHouse.querySelector('.popup__text--address').textContent = flat.offer.address;
+  cardHouse.querySelector('.popup__text--price').textContent = flat.offer.price + '₽/ночь';
+  flatType.textContent = flat.offer.type;
+  flatType.textContent = TYPE[flat.offer.type];
+  cardHouse.querySelector('.popup__description').textContent = flat.offer.description;
+  cardHouse.querySelector('.popup__text--capacity').textContent = flat.offer.rooms + ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
+  cardHouse.querySelector('.popup__text--time').textContent = 'Заезд после ' + flat.offer.checkin + ', ' + 'выезд до ' + flat.offer.checkout;
+
+  // Вставляем features
+
+  features.innerHTML = '';
+  for (var j = 0; j < flat.offer.features.length; j++) {
+    var li = document.createElement('li');
+    li.className = 'feature  feature--' + flat.offer.features[j];
+    featuresFragment.appendChild(li);
+  }
+  features.appendChild(featuresFragment);
+  features.nextElementSibling.textContent = flat.offer.description;
+>>>>>>> master
   document.querySelector('.map').appendChild(cardHouse);
 
   // Вставляем photos
 
+<<<<<<< HEAD
   var photoInsert = function () {
     flat.offer.photos.forEach(function (li) {
       li = document.createElement('li');
@@ -227,6 +268,22 @@ var renderCardHouse = function (flat) {
     photo.appendChild(photoFragment);
   };
   photoInsert();
+=======
+  photo.innerHTML = '';
+  var photoInsert = function () {
+    for (var k = 0; k < flat.offer.photos.length; k++) {
+      var li = document.createElement('li');
+      var img = document.createElement('img');
+      img.width = 70;
+      img.height = 70;
+      photo.appendChild(img);
+      img.src = flat.offer.photos[k];
+      photoFragment.appendChild(li);
+    }
+    photo.appendChild(photoFragment);
+  };
+  photoInsert()
+>>>>>>> master
 };
 
 renderCardHouse(flats[0]);
