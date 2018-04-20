@@ -118,7 +118,7 @@ var getVariantsFlats = function () {
         checkin: getRandomNumber(HOUSE_CHECKIN_CHECKOUT),
         checkout: getRandomNumber(HOUSE_CHECKIN_CHECKOUT),
         features: getRandomFeatures(HOUSE_FEATURES),
-        description: '',
+        description: ' ',
         photos: randomArray(HOUSE_PHOTOS)
       },
 
