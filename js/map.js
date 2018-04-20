@@ -83,14 +83,13 @@ var getRandomFeatures = function (array) {
 // Функция для сортировки фото в случайном порядке
 
 var randomArray = function (array) {
-  var arrCopy = array.slice();
-  var result = [];
-  for (var i = arrCopy.length - 1; i >= 0; i--) {
-    var randomArrayIndex = Math.floor(Math.random() * (i + 1));
-    result.push(arrCopy[randomArrayIndex]);
-    arrCopy.splice(randomArrayIndex, 1);
+  for (var i = array.length - 1; i >= 0; i--) {
+    var randArrayInd = Math.floor(Math.random * (i + 1));
+    var itemArrayInd = array[randArrayInd];
+    array[randArrayInd] = array[i];
+    array[i] = itemArrayInd;
   }
-  return result;
+  return array;
 };
 
 // Вставляем сгенерированные квартиры сюда
@@ -119,7 +118,7 @@ var getVariantsFlats = function () {
         checkout: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
         features: getRandomFeatures(HOUSE_FEATURES),
         description: '',
-        photos: randomArray(HOUSE_PHOTOS)
+        photos: randomArray(HOUSE_PHOTOS.slice())
       },
 
       location: {
