@@ -84,7 +84,7 @@ var getRandomFeatures = function (array) {
 
 var randomArray = function (array) {
   for (var i = array.length - 1; i >= 0; i--) {
-    var randArrayInd = Math.floor(Math.random * (i + 1));
+    var randArrayInd = Math.floor(Math.random() * (i + 1));
     var itemArrayInd = array[randArrayInd];
     array[randArrayInd] = array[i];
     array[i] = itemArrayInd;
