@@ -35,62 +35,57 @@ var HOUSE_FEATURES = [
   'conditioner'
 ];
 
-var HOUSE_PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
 
 // Функция генерирующая случайное число
 
-var getRandomNumber = function (min, max) {
+function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+}
 
 // Получение случайного элемента массива
 
-var getRandomItem = function (array) {
+function getRandomItem(array) {
   var randomItem = Math.floor(Math.random() * array.length);
   return array[randomItem];
-};
+}
 
 // Функция генерирующая уникальные фичи
 
-var getUniqueFeatures = function (array) {
-  var uniqueFeatures = {};
-  var resultUniqueFeatures = [];
+function getUniqueFeatures(array) {
+  var obj = {};
+  var resultFeatures = [];
   for (var i = 0; i < array.length; i++) {
     var item = array[i];
-    if (uniqueFeatures[item] !== 1) {
-      uniqueFeatures[item] = 1;
-      resultUniqueFeatures.push(item);
+    if (obj[item] !== 1) {
+      obj[item] = 1;
+      resultFeatures.push(item);
     }
   }
-  return resultUniqueFeatures;
-};
+  return resultFeatures;
+}
 
 // Функция генерирующая случайные фичи из массива resultUniqueFeatures
 
-var getRandomFeatures = function (array) {
+function getRandomFeatures(array) {
   var randomLengthFeatures = getRandomNumber(1, array.length);
   var result = [];
   for (var i = 0; i < randomLengthFeatures; i++) {
     result.push(getRandomItem(array));
   }
   return getUniqueFeatures(result);
-};
+}
 
 // Функция для сортировки фото в случайном порядке
 
-var randomArray = function (array) {
-  for (var i = array.length - 1; i >= 0; i--) {
+/* var randomArray = function (array) {
+  for (var i = array.lenght - 1; i >= 0; i--) {
     var randArrayInd = Math.floor(Math.random() * (i + 1));
     var itemArrayInd = array[randArrayInd];
     array[randArrayInd] = array[i];
     array[i] = itemArrayInd;
   }
   return array;
-};
+}; */
 
 // Вставляем сгенерированные квартиры сюда
 
@@ -98,7 +93,7 @@ var flats = [];
 
 // Генерируем различные варианты квартир
 
-var getVariantsFlats = function () {
+function getVariantsFlats() {
   for (var i = 1; i < 8; i++) {
     var adressX = getRandomNumber(300, 900);
     var adressY = getRandomNumber(150, 500);
@@ -118,27 +113,22 @@ var getVariantsFlats = function () {
         checkout: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
         features: getRandomFeatures(HOUSE_FEATURES),
         description: '',
-        photos: randomArray(HOUSE_PHOTOS.slice())
+        photos: []
       },
 
       location: {
-        x: getRandomNumber(300, 900),
-        y: getRandomNumber(150, 500)
+        x: adressX,
+        y: adressY
       }
-
     });
   }
   return flats;
-};
+}
 
 getVariantsFlats();
 
 // ================================================================================
 
-// Переключаем карту в активное состояние
-
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
 // Создаем шаблон меток
 
@@ -150,18 +140,20 @@ var mapPins = document.querySelector('.map__pins');
 
 // Функция создающая метки
 
-var renderMapPin = function (pin) {
-  var newMapPin = templateMapPins.cloneNode(true);
-  newMapPin.querySelector('img').src = pin.author.avatar;
-  newMapPin.style.left = (pin.location.x) + 'px';
-  newMapPin.style.top = (pin.location.y) + 'px';
-  return newMapPin;
-};
+function renderMapPins(pin, index) {
+  var newMapPins = templateMapPins.cloneNode(true);
+  newMapPins.querySelector('img').src = pin.author.avatar;
+  newMapPins.querySelector('img').setAttribute('rel', index);
+  newMapPins.style.left = (pin.location.x) + 'px';
+  newMapPins.style.top = (pin.location.y) + 'px';
+  newMapPins.setAttribute('rel', index);
+  return newMapPins;
+}
 
-var fragmentPins = document.createDocumentFragment(flats);
+var fragmentPins = document.createDocumentFragment();
 
 for (var i = 0; i < flats.length; i++) {
-  fragmentPins.appendChild(renderMapPin(flats[i]));
+  fragmentPins.appendChild(renderMapPins(flats[i], i));
 }
 mapPins.appendChild(fragmentPins);
 
@@ -180,12 +172,12 @@ var TYPE = {
 
 // Функция генерирующая новые карточки с информацией
 
-var renderCardHouse = function (flat) {
+function renderCardHouse(flat, index) {
   var cardHouse = templateCardHouse.cloneNode(true);
   var features = cardHouse.querySelector('.popup__features');
   var flatType = cardHouse.querySelector('.popup__type');
-  var photo = cardHouse.querySelector('.popup__photos');
-  var photoFragment = document.createDocumentFragment();
+  /* var photo = cardHouse.querySelector('.popup__photos');
+  var photoFragment = document.createDocumentFragment(); */
   var featuresFragment = document.createDocumentFragment();
 
   cardHouse.querySelector('.popup__avatar').src = flat.author.avatar;
@@ -209,10 +201,10 @@ var renderCardHouse = function (flat) {
   features.appendChild(featuresFragment);
   features.nextElementSibling.textContent = flat.offer.description;
   document.querySelector('.map').appendChild(cardHouse);
-
+  cardHouse.setAttribute('rel', index);
   // Вставляем photos
 
-  photo.innerHTML = '';
+  /* photo.innerHTML = '';
   var photoInsert = function () {
     for (var k = 0; k < flat.offer.photos.length; k++) {
       var li = document.createElement('li');
@@ -225,7 +217,107 @@ var renderCardHouse = function (flat) {
     }
     photo.appendChild(photoFragment);
   };
-  photoInsert()
-};
+  photoInsert() */
 
-renderCardHouse(flats[0]);
+  // Удаляем карточку квартиры по клику на крестик
+
+  var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
+  var popup = document.querySelectorAll('.popup');
+
+   popupClose.forEach(function (t) {
+     t.addEventListener('click', function () {
+       popup.forEach(function (elem) {
+         elem.remove();
+       });
+       mapPin.forEach(function (elem) {
+         elem.classList.remove('map__pin--active');
+       });
+       document.removeEventListener('keydown', popupCloseCrossHandler);
+     });
+   });
+
+   // Удаляем карточку квартиры по нажатию ESCAPE
+
+  function popupCloseCrossHandler(esc) {
+    if (esc.keyCode === ESC_BUTTON) {
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
+    }
+  }
+  document.addEventListener('keydown', popupCloseCrossHandler);
+}
+
+var ESC_BUTTON = 27;
+var ENTER_BUTTON = 13;
+
+// Элементы разметки
+
+var form = document.querySelector('.ad-form'); // форма
+var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
+var map = document.querySelector('.map'); // карта
+
+
+// Скрываем метки после загрузки страницы
+
+var mapPin = document.querySelectorAll('.map__pin');
+mapPin.forEach(function (hide) {
+hide.style.display = 'none';
+hide.classList.remove('map__pin--active');
+});
+
+// Главная метка видна после загрузки страницы
+
+mapPinMain.style.display = 'block';
+
+// Скрываем карточки с инфоормацией
+
+var houseCard = document.querySelectorAll('.popup');
+houseCard.forEach(function (hide) {
+hide.style.display = 'none';
+});
+
+// Активируем карту
+
+mapPinMain.addEventListener('mouseup', function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+
+  // Отображаем метки и карточки квартир на экране
+
+  mapPin.forEach(function (element) {
+    element.style.display = 'block';
+    element.addEventListener('click', function (view) {
+      var index = view.target.getAttribute('rel');
+      if (index) {
+        renderCardHouse(flats[index]);
+      }
+    });
+  });
+});
+
+// добавляем класс метке по клику
+
+mapPin.forEach(function (pin) {
+  pin.addEventListener('click', function (ad) {
+    mapPin.forEach(function () {
+      mapPinMain.classList.remove('map__pin--active');
+      pin.className = pin.className.replace('map__pin--active', '');
+      ad.currentTarget.classList.add('map__pin--active');
+    });
+  });
+});
+
+// Добавляем активный класс метке по нажатию ENTER
+
+mapPin.forEach(function (elem) {
+  elem.addEventListener('keydown', function (ent) {
+    mapPin.forEach(function (p) {
+      if (ent.keyCode === ENTER_BUTTON) {
+        p.className = p.className.replace('map__pin--active', '');
+        ent.currentTarget.classList.add('map__pin--active');
+      }
+    });
+  });
+});
