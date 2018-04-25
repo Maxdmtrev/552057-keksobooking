@@ -257,7 +257,10 @@ var ENTER_BUTTON = 13;
 var form = document.querySelector('.ad-form'); // форма
 var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
 var map = document.querySelector('.map'); // карта
-
+var fieldset = document.querySelectorAll('fieldset'); // поля
+var filters = document.querySelectorAll('.map__filters-container') // Фильтры
+var address = form.querySelector('#address')
+// var avatar = document.querySelectorAll('#avatar');
 
 // Скрываем метки после загрузки страницы
 
@@ -278,12 +281,24 @@ houseCard.forEach(function (hide) {
 hide.style.display = 'none';
 });
 
+// Делаем неактивными поля формы
+
+fieldset.forEach(function (elem) {
+  elem.setAttribute('disabled', 'disabled');
+});
+
+// Функция показывающая координаты метки в строке адреса
+
+function getCoordinatePin() {
+  address.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
+};
+
 // Активируем карту
 
 mapPinMain.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
-
+  getCoordinatePin();
   // Отображаем метки и карточки квартир на экране
 
   mapPin.forEach(function (element) {
@@ -295,9 +310,12 @@ mapPinMain.addEventListener('mouseup', function () {
       }
     });
   });
+  fieldset.forEach(function (elem) {
+    elem.removeAttribute('disabled');
+  });
 });
 
-// добавляем класс метке по клику
+// Добавляем класс метке по клику
 
 mapPin.forEach(function (pin) {
   pin.addEventListener('click', function (ad) {
