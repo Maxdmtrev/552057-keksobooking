@@ -230,7 +230,7 @@ var map = document.querySelector('.map'); // карта
 var fieldset = document.querySelectorAll('fieldset'); // поля
 var filters = document.querySelectorAll('.map__filters-container') // Фильтры
 var address = form.querySelector('#address')
-// var avatar = document.querySelectorAll('#avatar');
+
 
 // Скрываем метки после загрузки страницы
 

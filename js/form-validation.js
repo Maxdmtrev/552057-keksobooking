@@ -36,7 +36,7 @@
       var indexOfValue = firstOptions.indexOf(firstControl.value);
       callBackFunction(secondControl, secondOptions[indexOfValue]);
     }
-    firstControl.addEventListener('change', syncFormControlsClickHandler);
+    firstControl.addEventListener('change', function () {});
   }
 
   syncFormControls(formTimeIn, formTimeOut, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
