@@ -75,18 +75,6 @@ function getRandomFeatures(array) {
   return getUniqueFeatures(result);
 }
 
-// Функция для сортировки фото в случайном порядке
-
-/* var randomArray = function (array) {
-  for (var i = array.lenght - 1; i >= 0; i--) {
-    var randArrayInd = Math.floor(Math.random() * (i + 1));
-    var itemArrayInd = array[randArrayInd];
-    array[randArrayInd] = array[i];
-    array[i] = itemArrayInd;
-  }
-  return array;
-}; */
-
 // Вставляем сгенерированные квартиры сюда
 
 var flats = [];
@@ -176,8 +164,6 @@ function renderCardHouse(flat, index) {
   var cardHouse = templateCardHouse.cloneNode(true);
   var features = cardHouse.querySelector('.popup__features');
   var flatType = cardHouse.querySelector('.popup__type');
-  /* var photo = cardHouse.querySelector('.popup__photos');
-  var photoFragment = document.createDocumentFragment(); */
   var featuresFragment = document.createDocumentFragment();
 
   cardHouse.querySelector('.popup__avatar').src = flat.author.avatar;
@@ -202,22 +188,6 @@ function renderCardHouse(flat, index) {
   features.nextElementSibling.textContent = flat.offer.description;
   document.querySelector('.map').appendChild(cardHouse);
   cardHouse.setAttribute('rel', index);
-  // Вставляем photos
-
-  /* photo.innerHTML = '';
-  var photoInsert = function () {
-    for (var k = 0; k < flat.offer.photos.length; k++) {
-      var li = document.createElement('li');
-      var img = document.createElement('img');
-      img.width = 70;
-      img.height = 70;
-      photo.appendChild(img);
-      img.src = flat.offer.photos[k];
-      photoFragment.appendChild(li);
-    }
-    photo.appendChild(photoFragment);
-  };
-  photoInsert() */
 
   // Удаляем карточку квартиры по клику на крестик
 
@@ -289,16 +259,24 @@ fieldset.forEach(function (elem) {
 
 // Функция показывающая координаты метки в строке адреса
 
-function getCoordinatePin() {
-  address.value = mapPinMain.style.left.slice(0, -2) + ', ' + mapPinMain.style.top.slice(0, -2);
+var PIN_SIZE = 65;
+
+function getCoordinatePin(center) {
+  center = center === 'center' ? 2 : 1;
+  var left = parseInt(mapPinMain.style.left) + PIN_SIZE / 2;
+  var top = parseInt(mapPinMain.style.top) + PIN_SIZE / center;
+  return left  + ', ' + top;
 };
+
+address.value = getCoordinatePin('center');
 
 // Активируем карту
 
 mapPinMain.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
-  getCoordinatePin();
+  address.value = getCoordinatePin();
+
   // Отображаем метки и карточки квартир на экране
 
   mapPin.forEach(function (element) {
