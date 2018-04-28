@@ -36,12 +36,13 @@
       var indexOfValue = firstOptions.indexOf(firstControl.value);
       callBackFunction(secondControl, secondOptions[indexOfValue]);
     }
-    firstControl.addEventListener('change', function () {});
+
+    firstControl.addEventListener('change', syncFormControlsClickHandler);
   }
 
   syncFormControls(formTimeIn, formTimeOut, FORM_CHECKINS, FORM_CHECKOUTS, syncFormControlValues);
   syncFormControls(formTimeOut, formTimeIn, FORM_CHECKOUTS, FORM_CHECKINS, syncFormControlValues);
   syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_PRICES, syncFormControlMinValues);
-  syncFormControls(formRoomNumber, formRoomCapacity, FORM_ROOM_NUMBERS, FORM_ROOM_CAPACITIES, syncFormControlValues);
+  syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
 
 })();
