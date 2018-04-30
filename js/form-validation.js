@@ -23,7 +23,7 @@
     element.value = value;
   }
 
-  //Задаем значение с минимальной ценой для квартиры
+  // Задаем значение с минимальной ценой для квартиры
 
   function syncFormControlMinValues(element, value) {
     element.min = value;

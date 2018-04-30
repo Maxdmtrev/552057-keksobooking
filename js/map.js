@@ -194,19 +194,19 @@ function renderCardHouse(flat, index) {
   var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
   var popup = document.querySelectorAll('.popup');
 
-   popupClose.forEach(function (t) {
-     t.addEventListener('click', function () {
-       popup.forEach(function (elem) {
-         elem.remove();
-       });
-       mapPin.forEach(function (elem) {
-         elem.classList.remove('map__pin--active');
-       });
-       document.removeEventListener('keydown', popupCloseCrossHandler);
-     });
-   });
+  popupClose.forEach(function (t) {
+    t.addEventListener('click', function () {
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
+      mapPin.forEach(function (elem) {
+        elem.classList.remove('map__pin--active');
+      });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
+    });
+  });
 
-   // Удаляем карточку квартиры по нажатию ESCAPE
+  // Удаляем карточку квартиры по нажатию ESCAPE
 
   function popupCloseCrossHandler(esc) {
     if (esc.keyCode === ESC_BUTTON) {
@@ -228,7 +228,7 @@ var form = document.querySelector('.ad-form'); // форма
 var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
 var map = document.querySelector('.map'); // карта
 var fieldset = document.querySelectorAll('fieldset'); // поля
-var address = form.querySelector('#address');  // адрес
+var address = form.querySelector('#address'); // адрес
 var formTypeFlat = document.querySelector('#type'); // тип
 var formPriceFlat = document.querySelector('#price'); // цена
 var formTimeIn = document.querySelector('#timein'); // время заезда
@@ -241,8 +241,8 @@ var formRoomCapacity = document.querySelector('#capacity'); // вместимо�
 
 var mapPin = document.querySelectorAll('.map__pin');
 mapPin.forEach(function (hide) {
-hide.style.display = 'none';
-hide.classList.remove('map__pin--active');
+  hide.style.display = 'none';
+  hide.classList.remove('map__pin--active');
 });
 
 // Главная метка видна после загрузки страницы
@@ -253,7 +253,7 @@ mapPinMain.style.display = 'block';
 
 var houseCard = document.querySelectorAll('.popup');
 houseCard.forEach(function (hide) {
-hide.style.display = 'none';
+  hide.style.display = 'none';
 });
 
 // Делаем неактивными поля формы
@@ -268,9 +268,9 @@ var PIN_SIZE = 65;
 
 function getCoordinatePin(center) {
   center = center === 'center' ? 2 : 1;
-  var left = parseInt(mapPinMain.style.left) + PIN_SIZE / 2;
-  var top = parseInt(mapPinMain.style.top) + PIN_SIZE / center;
-  return left  + ', ' + top;
+  var left = parseInt(mapPinMain.style.left, 10) + PIN_SIZE / 2;
+  var top = parseInt(mapPinMain.style.top, 10) + PIN_SIZE / center;
+  return left + ', ' + top;
 }
 
 address.value = getCoordinatePin('center');
@@ -326,11 +326,11 @@ mapPin.forEach(function (elem) {
 // Проверка поля тип жилья
 
 var TYPE_PRICE = {
-   'palace': 10000,
-   'flat': 1000,
-   'bungalo': 0,
-   'house': 5000
- };
+  'palace': 10000,
+  'flat': 1000,
+  'bungalo': 0,
+  'house': 5000
+};
 
 function selectTypeChangeHandler() {
   formTypeFlat.addEventListener('change', function () {
@@ -345,7 +345,7 @@ selectTypeChangeHandler();
 
 function validateTime() {
   if (formTimeIn.value !== formTimeOut.value) {
-   formTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
+    formTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
   } else {
     formTimeIn.setCustomValidity('');
   }
@@ -357,19 +357,19 @@ validateTime();
 
 function checkValidationFlat() {
   formRoomCapacity.addEventListener('change', function () {
-  var roomsValue = formRoomNumber.value;
-  var capacityValue = formRoomCapacity.value;
-  var errorMessage = '';
+    var roomsValue = formRoomNumber.value;
+    var capacityValue = formRoomCapacity.value;
+    var errorMessage = '';
 
-  if (roomsValue === '100' && capacityValue !== '0') {
-    errorMessage = 'необходимо выбрать "не для гостей"';
-  } else if (roomsValue !== '100' && capacityValue === '0') {
-    errorMessage = 'необходимо выбрать как минимум 1 гостя, но не более ' + roomsValue + ' гостей';
-  } else if (roomsValue < capacityValue) {
-    errorMessage = 'необходимо выбрать не более ' + roomsValue + ' гостей';
-  }
-  formRoomCapacity.setCustomValidity(errorMessage);
-});
+    if (roomsValue === '100' && capacityValue !== '0') {
+      errorMessage = 'необходимо выбрать "не для гостей"';
+    } else if (roomsValue !== '100' && capacityValue === '0') {
+      errorMessage = 'необходимо выбрать как минимум 1 гостя, но не более ' + roomsValue + ' гостей';
+    } else if (roomsValue < capacityValue) {
+      errorMessage = 'необходимо выбрать не более ' + roomsValue + ' гостей';
+    }
+    formRoomCapacity.setCustomValidity(errorMessage);
+  });
 }
 
 checkValidationFlat();
