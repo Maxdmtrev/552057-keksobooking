@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.map = (function () {
   var MAP_PIN_SIZE = {
     width: 65,
     height: 95
