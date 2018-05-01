@@ -36,8 +36,8 @@
       };
 
       var dragPinLimits = {
-        minX: 0,
-        maxX: map.clientWidth,
+        minX: 50,
+        maxX: map.clientWidth - 100,
         minY: COORDS_LIMIT.top - MAP_PIN_SIZE.height / 2,
         maxY: COORDS_LIMIT.bottom - MAP_PIN_SIZE.height / 2
       };
