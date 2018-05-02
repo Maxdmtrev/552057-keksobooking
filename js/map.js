@@ -40,14 +40,6 @@
   var map = document.querySelector('.map'); // карта
   var fieldset = document.querySelectorAll('fieldset'); // поля
   var address = form.querySelector('#address'); // адрес
-  var formTypeFlat = document.querySelector('#type'); // тип
-  var formPriceFlat = document.querySelector('#price'); // цена
-  var formTimeIn = document.querySelector('#timein'); // время заезда
-  var formTimeOut = document.querySelector('#timeout'); // время выезда
-  var formRoomNumber = document.querySelector('#room_number'); // количество комнат
-  var formRoomCapacity = document.querySelector('#capacity'); // вместимость
-
-
   // Скрываем метки после загрузки страницы
 
   var mapPin = document.querySelectorAll('.map__pin');
@@ -100,7 +92,7 @@
       element.addEventListener('click', function (view) {
         var index = view.target.getAttribute('rel');
         if (index) {
-          renderCardHouse(window.data.flats[index]);
+          window.renderCardHouse(window.data.flats[index]);
         }
       });
     });

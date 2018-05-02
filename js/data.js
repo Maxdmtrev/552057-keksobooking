@@ -54,10 +54,10 @@ window.data = (function () {
   // Функция генерирующая случайные фичи из массива resultUniqueFeatures
 
   function getRandomFeatures(array) {
-    var randomLengthFeatures = getRandomNumber(1, array.length);
+    var randomLengthFeatures = window.getRandomNumber(1, array.length);
     var result = [];
     for (var i = 0; i < randomLengthFeatures; i++) {
-      result.push(getRandomItem(array));
+      result.push(window.getRandomItem(array));
     }
     return getUniqueFeatures(result);
   }
@@ -71,21 +71,21 @@ window.data = (function () {
   function getVariantsFlats() {
     for (var i = 1; i < 8; i++) {
       var adressX = window.getRandomNumber(300, 900);
-      var adressY = getRandomNumber(150, 500);
+      var adressY = window.getRandomNumber(150, 500);
 
       flats.push({
         author: {
           avatar: 'img/avatars/user' + '0' + i + '.png'
         },
         offer: {
-          title: getRandomItem(HOUSE_TITLE),
+          title: window.getRandomItem(HOUSE_TITLE),
           address: adressX + ', ' + adressY,
-          price: getRandomNumber(1000, 1000000),
-          type: getRandomItem(HOUSE_TYPE),
-          rooms: getRandomNumber(1, 5),
-          guests: getRandomNumber(1, 10),
-          checkin: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
-          checkout: getRandomItem(HOUSE_CHECKIN_CHECKOUT),
+          price: window.getRandomNumber(1000, 1000000),
+          type: window.getRandomItem(HOUSE_TYPE),
+          rooms: window.getRandomNumber(1, 5),
+          guests: window.getRandomNumber(1, 10),
+          checkin: window.getRandomItem(HOUSE_CHECKIN_CHECKOUT),
+          checkout: window.getRandomItem(HOUSE_CHECKIN_CHECKOUT),
           features: getRandomFeatures(HOUSE_FEATURES),
           description: '',
           photos: []
@@ -105,6 +105,7 @@ window.data = (function () {
   // Создаем шаблон карточек квартиры
 
   var templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
+  var mapPin = document.querySelectorAll('.map__pin');
 
   // Объект с названием квартир
 

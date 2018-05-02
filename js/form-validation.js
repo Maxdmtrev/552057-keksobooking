@@ -10,12 +10,12 @@
 
   // Поля формы
 
-  var formTypeFlat = document.querySelector('#type');
-  var formPriceFlat = document.querySelector('#price');
-  var formTimeIn = document.querySelector('#timein');
-  var formTimeOut = document.querySelector('#timeout');
-  var formRoomNumber = document.querySelector('#room_number');
-  var formRoomCapacity = document.querySelector('#capacity');
+  var formTypeFlat = document.querySelector('#type'); // тип
+  var formPriceFlat = document.querySelector('#price'); // цена
+  var formTimeIn = document.querySelector('#timein'); // время заезда
+  var formTimeOut = document.querySelector('#timeout'); // время выезда
+  var formRoomNumber = document.querySelector('#room_number'); // количество комнат
+  var formRoomCapacity = document.querySelector('#capacity'); // вместимость
 
   // Синхронизация атрибутов value
 

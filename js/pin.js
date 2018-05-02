@@ -24,7 +24,7 @@
   var fragmentPins = document.createDocumentFragment();
 
   for (var i = 0; i < window.data.flats.length; i++) {
-    fragmentPins.appendChild(renderMapPins(window.data.flats[i], i));
+    fragmentPins.appendChild(window.renderMapPins(window.data.flats[i], i));
   }
   mapPins.appendChild(fragmentPins);
 
