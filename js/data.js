@@ -35,6 +35,7 @@ window.data = (function () {
     'elevator',
     'conditioner'
   ];
+  
 
   // Функция генерирующая уникальные фичи
 

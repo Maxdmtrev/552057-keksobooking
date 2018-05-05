@@ -4,7 +4,7 @@
 
   // Создаем шаблон карточек квартиры
 
-  var templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
+  var window.templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
   var mapPin = document.querySelectorAll('.map__pin');
 
   // Объект с названием квартир
@@ -15,7 +15,7 @@
     'house': 'Дом',
     'palace': 'Дворец'
   };
-
+/*
   // Функция генерирующая новые карточки с информацией
 
   window.renderCardHouse = function (flat, index) {
@@ -46,7 +46,7 @@
     features.nextElementSibling.textContent = flat.offer.description;
     document.querySelector('.map').appendChild(cardHouse);
     cardHouse.setAttribute('rel', index);
-
+*/
     // Удаляем карточку квартиры по клику на крестик
 
     var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
