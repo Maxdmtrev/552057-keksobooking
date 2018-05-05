@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.map = (function () {
   var MAP_PIN_SIZE = {
     width: 65,
     height: 95
@@ -66,8 +66,8 @@
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      var address = document.querySelector('#address');
-      address.value = 'x: ' + parseInt(markerCoords.x, 10) + ', ' + 'y: ' + (parseInt(markerCoords.y, 10) + MAP_PIN_SIZE.height / 2);
+      window.address = document.querySelector('#address');
+      window.address.value = 'x: ' + parseInt(markerCoords.x, 10) + ', ' + 'y: ' + (parseInt(markerCoords.y, 10) + MAP_PIN_SIZE.height / 2);
     }
 
     document.addEventListener('mousemove', onMouseMove);

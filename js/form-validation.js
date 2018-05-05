@@ -10,12 +10,12 @@
 
   // Поля формы
 
-  var formTypeFlat = document.querySelector('#type');
-  var formPriceFlat = document.querySelector('#price');
-  var formTimeIn = document.querySelector('#timein');
-  var formTimeOut = document.querySelector('#timeout');
-  var formRoomNumber = document.querySelector('#room_number');
-  var formRoomCapacity = document.querySelector('#capacity');
+  var formTypeFlat = document.querySelector('#type'); // тип
+  var formPriceFlat = document.querySelector('#price'); // цена
+  var formTimeIn = document.querySelector('#timein'); // время заезда
+  var formTimeOut = document.querySelector('#timeout'); // время выезда
+  var formRoomNumber = document.querySelector('#room_number'); // количество комнат
+  var formRoomCapacity = document.querySelector('#capacity'); // вместимость
 
   // Синхронизация атрибутов value
 
@@ -45,4 +45,54 @@
   syncFormControls(formTypeFlat, formPriceFlat, FORM_TYPES, FORM_TYPES_PRICES, syncFormControlMinValues);
   syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues);
 
+  // Проверка поля тип жилья
+
+  var TYPE_PRICE = {
+    'palace': 10000,
+    'flat': 1000,
+    'bungalo': 0,
+    'house': 5000
+  };
+
+  function selectTypeChangeHandler() {
+    formTypeFlat.addEventListener('change', function () {
+      formPriceFlat.placeholder = TYPE_PRICE[formTypeFlat.value];
+      formPriceFlat.min = TYPE_PRICE[formTypeFlat.value];
+    });
+  }
+
+  selectTypeChangeHandler();
+
+  // Проверка поля времени
+
+  function validateTime() {
+    if (formTimeIn.value !== formTimeOut.value) {
+      formTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
+    } else {
+      formTimeIn.setCustomValidity('');
+    }
+  }
+
+  validateTime();
+
+  // Проверка поля количества комнат
+
+  function checkValidationFlat() {
+    formRoomCapacity.addEventListener('change', function () {
+      var roomsValue = formRoomNumber.value;
+      var capacityValue = formRoomCapacity.value;
+      var errorMessage = '';
+
+      if (roomsValue === '100' && capacityValue !== '0') {
+        errorMessage = 'необходимо выбрать "не для гостей"';
+      } else if (roomsValue !== '100' && capacityValue === '0') {
+        errorMessage = 'необходимо выбрать как минимум 1 гостя, но не более ' + roomsValue + ' гостей';
+      } else if (roomsValue < capacityValue) {
+        errorMessage = 'необходимо выбрать не более ' + roomsValue + ' гостей';
+      }
+      formRoomCapacity.setCustomValidity(errorMessage);
+    });
+  }
+
+  checkValidationFlat();
 })();
