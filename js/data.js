@@ -35,8 +35,6 @@ window.data = (function () {
     'elevator',
     'conditioner'
   ];
-  
-
   // Функция генерирующая уникальные фичи
 
   function getUniqueFeatures(array) {

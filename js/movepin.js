@@ -66,7 +66,7 @@ window.map = (function () {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      var address = document.querySelector('#address');
+      window.address = document.querySelector('#address');
       window.address.value = 'x: ' + parseInt(markerCoords.x, 10) + ', ' + 'y: ' + (parseInt(markerCoords.y, 10) + MAP_PIN_SIZE.height / 2);
     }
 

@@ -4,18 +4,18 @@
 
   // Создаем шаблон карточек квартиры
 
-  var window.templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
+  window.templateCardHouse = document.querySelector('template').content.querySelector('.map__card');
   var mapPin = document.querySelectorAll('.map__pin');
 
   // Объект с названием квартир
 
-  var TYPE = {
+  window.TYPE = {
     'flat': 'Квартира',
     'bungalo': 'Бунгало',
     'house': 'Дом',
     'palace': 'Дворец'
   };
-/*
+  /*
   // Функция генерирующая новые карточки с информацией
 
   window.renderCardHouse = function (flat, index) {
@@ -47,49 +47,45 @@
     document.querySelector('.map').appendChild(cardHouse);
     cardHouse.setAttribute('rel', index);
 */
-    // Удаляем карточку квартиры по клику на крестик
+  // Удаляем карточку квартиры по клику на крестик
 
-    var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
-    var popup = document.querySelectorAll('.popup');
+  var popupClose = document.querySelectorAll('.popup__close'); // крестик на карточке
+  var popup = document.querySelectorAll('.popup');
 
-    popupClose.forEach(function (t) {
-      t.addEventListener('click', function () {
-        popup.forEach(function (elem) {
-          elem.remove();
-        });
-        mapPin.forEach(function (elem) {
-          elem.classList.remove('map__pin--active');
-        });
-        document.removeEventListener('keydown', popupCloseCrossHandler);
+  popupClose.forEach(function (t) {
+    t.addEventListener('click', function () {
+      popup.forEach(function (elem) {
+        elem.remove();
       });
+      mapPin.forEach(function (elem) {
+        elem.classList.remove('map__pin--active');
+      });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
     });
-
-    // Удаляем карточку квартиры по нажатию ESCAPE
-    var ESC_BUTTON = 27;
-    function popupCloseCrossHandler(esc) {
-      if (esc.keyCode === ESC_BUTTON) {
-        popup.forEach(function (elem) {
-          elem.remove();
-        });
-        document.removeEventListener('keydown', popupCloseCrossHandler);
-      }
-    }
-    document.addEventListener('keydown', popupCloseCrossHandler);
-  };
+  });
 
   var ESC_BUTTON = 27;
   var ENTER_BUTTON = 13;
 
+  // Удаляем карточку квартиры по нажатию ESCAPE
+  function popupCloseCrossHandler(esc) {
+    if (esc.keyCode === ESC_BUTTON) {
+      popup.forEach(function (elem) {
+        elem.remove();
+      });
+      document.removeEventListener('keydown', popupCloseCrossHandler);
+    }
+  }
+  document.addEventListener('keydown', popupCloseCrossHandler);
   // Элементы разметки
 
   var form = document.querySelector('.ad-form'); // форма
   var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
   var map = document.querySelector('.map'); // карта
   var fieldset = document.querySelectorAll('fieldset'); // поля
-  var address = form.querySelector('#address'); // адрес
+  window.address = form.querySelector('#address'); // адрес
   // Скрываем метки после загрузки страницы
 
-  var mapPin = document.querySelectorAll('.map__pin');
   mapPin.forEach(function (hide) {
     hide.style.display = 'none';
     hide.classList.remove('map__pin--active');
@@ -121,7 +117,7 @@
     var left = parseInt(mapPinMain.style.left, 10) + PIN_SIZE / 2;
     var top = parseInt(mapPinMain.style.top, 10) + PIN_SIZE / center;
     return left + ', ' + top;
-  }
+  };
 
   window.address.value = window.getCoordinatePin('center');
 
@@ -139,7 +135,7 @@
       element.addEventListener('click', function (view) {
         var index = view.target.getAttribute('rel');
         if (index) {
-          window.renderCardHouse(window.data.flats[index]);
+          window.card.renderCardHouse(window.data.flats[index]);
         }
       });
     });

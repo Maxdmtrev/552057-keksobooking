@@ -15,7 +15,7 @@
     cardHouse.querySelector('.popup__text--address').textContent = flat.offer.address;
     cardHouse.querySelector('.popup__text--price').textContent = flat.offer.price + '₽/ночь';
     flatType.textContent = flat.offer.type;
-    flatType.textContent = TYPE[flat.offer.type];
+    flatType.textContent = window.TYPE[flat.offer.type];
     cardHouse.querySelector('.popup__description').textContent = flat.offer.description;
     cardHouse.querySelector('.popup__text--capacity').textContent = flat.offer.rooms + ' комнаты' + ' для ' + flat.offer.guests + ' гостей';
     cardHouse.querySelector('.popup__text--time').textContent = 'Заезд после ' + flat.offer.checkin + ', ' + 'выезд до ' + flat.offer.checkout;
@@ -32,10 +32,9 @@
     features.nextElementSibling.textContent = flat.offer.description;
     document.querySelector('.map').appendChild(cardHouse);
     cardHouse.setAttribute('rel', index);
-    return index.innerHTML;
-}
-    window.card = {
-      renderCardHouse: renderCardHouse
-    }
+  }
+  window.card = {
+    renderCardHouse: renderCardHouse
+  };
 
 })();
