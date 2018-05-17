@@ -7,7 +7,7 @@
   var FORM_TYPES_PRICES = ['1000', '0', '5000', '10000'];
   var FORM_ROOM_NUMBERS = ['1', '2', '3', '100'];
   var FORM_ROOM_CAPACITIES = ['1', '2', '3', '0'];
-  var DEFAULT_AVATAR = 'img/muffin.png';
+  var DEFAULT_AVATAR = 'img/avatars/default.png';
 
   // Поля формы
   var form = document.querySelector('.ad-form');
@@ -23,12 +23,6 @@
   var fieldset = document.querySelectorAll('fieldset'); // поля
   var avatar = document.querySelector('#avatar'); // аватар
   var images = document.querySelector('#images'); // изображения
-  /*
-  // Делаем неактивными поля формы
-  fieldset.forEach(function (elem) {
-    elem.setAttribute('disabled', 'disabled');
-  });
-  */
 
   var disable = function (isDisable) {
     if (isDisable) {
@@ -68,23 +62,17 @@
     syncFormControls(formRoomCapacity, formRoomNumber, FORM_ROOM_CAPACITIES, FORM_ROOM_NUMBERS, syncFormControlValues, addListener);
   };
   initFieldSync(true);
-  /*
-  form.addEventListener('submit', function (el) {
-    window.backend.upLoad(new FormData(form), function (response) {
-      form.classList.add('notice_form--disabled');
-    });
-    el.preventDefault();
-  });
-  */
+
   var errorData = function (field, error) {
     field.style.border = (error) ? '1px solid red' : 'none';
   };
 
-  var errorHandle = function (message) {
+  var errorHandler = function (message) {
     var elem = document.createElement('DIV');
-    elem.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
+    elem.style = 'z.index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; ' +
+    'position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
     elem.textContent = 'Ошибка отправки формы: ' + message;
-    document.body.insertAdjacentElement('afterbegin', elem);
+    document.body.insertAdjacentHTML('afterbegin', elem);
   };
 
   var clearForm = function () {
@@ -92,25 +80,23 @@
   };
 
   var resetAvatar = function () {
-    var oldAvatar = document.querySelector('.ad-form-header__preview img');
-    var newAvatar = oldAvatar.cloneNode(true);
+    var newAvatar = document.querySelector('.ad-form-header__preview img');
     newAvatar.src = DEFAULT_AVATAR;
-    oldAvatar.remove();
-    document.querySelector('.ad-form-header__preview').appendChild(newAvatar);
   };
 
   var showImagePreview = function (image, file) {
     var reader = new FileReader();
-    reader.onload = function (e) {
-      image.src = e.target.result;
+    reader.onload = function (evt) {
+      image.src = evt.target.result;
     };
     reader.readAsDataURL(file);
   };
 
   var clearPhotoIcon = function () {
-    formPhoto.querySelectorAll('.icon').forEach(function (icon) {
-      icon.remove();
-    });
+    var formPhotoIcon = formPhoto.querySelectorAll('.icon');
+    for (var i = 0; i < formPhotoIcon.length; i++) {
+      formPhotoIcon[i].remove();
+    }
   };
 
   form.addEventListener('submit', function (e) {
@@ -143,7 +129,7 @@
     }
 
     if (!errors.length) {
-      window.backend.upLoad(new FormData(form), clearForm, errorHandle);
+      window.backend.upLoad(new FormData(form), clearForm, errorHandler);
     }
   });
 
@@ -157,28 +143,24 @@
     clearPhotoIcon();
     if (images.files.length > 0) {
       for (var i = 0; i < images.files.length; i++) {
+        var imageIconPhoto = document.querySelector('.ad-form__photo');
         var imageIconContainer = document.createElement('div');
-        imageIconContainer.classList.add('icon');
-        imageIconContainer.style.border = '1px solid silver';
-        imageIconContainer.style.borderRadius = '5px';
-        imageIconContainer.style.height = '100px';
-        imageIconContainer.style.padding = '5px';
-        imageIconContainer.style.float = 'left';
-        imageIconContainer.style.margin = '5px 5px 0px 0px';
         var imageIcon = document.createElement('img');
-        imageIcon.style.maxHeight = '100%';
+        imageIconContainer.classList.add('icon');
+        imageIconContainer.style.height = '100px';
+        imageIcon.style.maxWidth = '85%';
+        imageIcon.style.margin = '10px 5px 5px 5px';
+        imageIcon.style.maxHeight = '120%';
         showImagePreview(imageIcon, images.files[i]);
         imageIconContainer.appendChild(imageIcon);
-        formPhoto.appendChild(imageIconContainer);
+        imageIconPhoto.appendChild(imageIconContainer);
       }
     }
   });
 
   form.addEventListener('reset', function () {
     clearPhotoIcon();
-    setTimeout(function () {
-      initFieldSync(false);
-    }, 100);
+    resetAvatar();
   });
 
   // Проверка поля тип жилья
@@ -198,23 +180,12 @@
   }
   selectTypeChangeHandler();
 
-  // Проверка поля времени
-  function validateTime() {
-    if (formTimeIn.value !== formTimeOut.value) {
-      formTimeIn.setCustomValidity('Время заезда  и время выезда должно совпадать');
-    } else {
-      formTimeIn.setCustomValidity('');
-    }
-  }
-  validateTime();
-
   // Проверка поля количества комнат
   function checkValidationFlat() {
     formRoomCapacity.addEventListener('change', function () {
-      var roomsValue = formRoomNumber.value;
+      var roomsValue = parseInt(formRoomNumber.value, 10);
       var capacityValue = formRoomCapacity.value;
       var errorMessage = '';
-
       if (roomsValue === '100' && capacityValue !== '0') {
         errorMessage = 'необходимо выбрать "не для гостей"';
       } else if (roomsValue !== '100' && capacityValue === '0') {
@@ -231,6 +202,7 @@
     fieldset: fieldset,
     avatar: avatar,
     images: images,
-    disable: disable
+    disable: disable,
+    errorHandler: errorHandler
   };
 })();

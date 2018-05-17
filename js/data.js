@@ -20,14 +20,6 @@
   var flats = [];
   var photos = [];
 
-  var errorHandler = function (message) {
-    var elem = document.createElement('DIV');
-    elem.style = 'z.index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; ' +
-    'position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
-    elem.textContent = 'Ошибка отправки формы: ' + message;
-    document.body.innerAdjacentHTML('afterbegin', elem);
-  };
-
   var getOffersFromServer = function (callback) {
     window.backend.load(function (data) {
       window.data.flats = data;
@@ -36,7 +28,7 @@
         callback();
       }
     }, function (message) {
-      errorHandler(message);
+      window.form.errorHandler(message);
     });
   };
 

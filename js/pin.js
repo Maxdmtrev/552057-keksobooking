@@ -68,40 +68,6 @@
     }
     mapPinsCard.appendChild(fragment);
   }
-  /*
-  // Скрываем метки после загрузки страницы
-  mapPin.forEach(function (hide) {
-    hide.style.display = 'none';
-    hide.classList.remove('map__pin--active');
-  });
-
-  // Главная метка видна после загрузки страницы
-  mapPinMain.style.display = 'block';
-
-  // Добавляем класс метке по клику
-  mapPin.forEach(function (pin) {
-    pin.addEventListener('click', function (ad) {
-      mapPin.forEach(function () {
-        mapPinMain.classList.remove('map__pin--active');
-        pin.className = pin.className.replace('map__pin--active', '');
-        ad.currentTarget.classList.add('map__pin--active');
-      });
-    });
-  });
-
-  // Добавляем активный класс метке по нажатию ENTER
-  mapPin.forEach(function (elem) {
-    elem.addEventListener('keydown', function (ent) {
-      mapPin.forEach(function (p) {
-        if (ent.keyCode === ENTER_BUTTON) {
-          p.className = p.className.replace('map__pin--active', '');
-          ent.currentTarget.classList.add('map__pin--active');
-        }
-      });
-    });
-  });
-*/
-
 
   function mapPinMainHandle(evt) {
     evt.preventDefault();
@@ -180,19 +146,19 @@
   }
 
   function filterByType(offer, filter) {
-    return (filter.type === offer.offer.type);
+    return filter.type === offer.type;
   }
 
   function filterByPrice(offer, filter) {
     var result = true;
     switch (filter.price) {
       case 'middle':
-        if (offer.offer.price < 10000 || offer.offer.price > 50000) {
+        if (offer.price < 10000 || offer.price > 50000) {
           result = false;
         }
         break;
       case 'high':
-        if (offer.offer.price < 50000) {
+        if (offer.price < 50000) {
           result = false;
         }
         break;
@@ -201,17 +167,17 @@
   }
 
   function filterByRooms(offer, filter) {
-    return (parseInt(filter.rooms, 10) === parseInt(offer.offer.rooms, 10));
+    return (parseInt(filter.rooms, 10) === parseInt(offer.rooms, 10));
   }
 
   function filterByGuests(offer, filter) {
-    return (parseInt(filter.guests, 10) === parseInt(offer.offer.guests, 10));
+    return (parseInt(filter.guests, 10) === parseInt(offer.guests, 10));
   }
 
   function filterByFeatures(offer, filter) {
     var result = true;
     filter.features.forEach(function (feature) {
-      if (offer.offer.features.indexOf(feature) < 0) {
+      if (offer.features.indexOf(feature) < 0) {
         result = false;
       }
     });

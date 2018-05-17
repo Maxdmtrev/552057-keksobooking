@@ -4,8 +4,9 @@
 
   // Функция генерирующая новые карточки с информацией
 
-  function renderCardHouse(data, cardHouse) {
-    /* var cardHouse = window.templateCardHouse.cloneNode(true); */
+  function renderCardHouse(data) {
+    var cardTemplate = document.querySelector('template').content.querySelector('.map__card');
+    var cardHouse = cardTemplate.cloneNode(true);
     var cardTitle = cardHouse.querySelector('.popup__title');
     var cardAddress = cardHouse.querySelector('.popup__text--address');
     var cardPrice = cardHouse.querySelector('.popup__text--price');

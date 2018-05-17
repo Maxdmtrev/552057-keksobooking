@@ -20,21 +20,6 @@
     window.pin.makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     document.removeEventListener('keydown', popupCloseEscape);
   };
-  /*
-  // Удаляем карточку квартиры по клику на крестик
-  popupClose.forEach(function (t) {
-    t.addEventListener('click', function () {
-      popup.forEach(function (elem) {
-        elem.remove();
-      });
-      window.pin.mapPin.forEach(function (elem) {
-        elem.classList.remove('map__pin--active');
-      });
-      document.removeEventListener('keydown', popupCloseCrossHandler);
-    });
-  });
- */
-
   // Удаляем карточку квартиры по нажатию ESCAPE
   var popupCloseEscape = function (esc) {
     if (esc.keyCode === ESC_BUTTON) {
