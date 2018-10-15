@@ -15,21 +15,31 @@
   var MAIN_PIN_TOP_OFFSET = 48;
   var TIMEOUT_DEFAULT = 500;
   var PINS_LIMIT = 5;
-  /* var ENTER_BUTTON = 13; */
-  var map = document.querySelector('.map'); // карта
-  var mapPin = document.querySelectorAll('.map__pin'); //
-  var mapPinMain = document.querySelector('.map__pin--main'); // главная метка
-  var mapPinsCard = document.querySelector('.map__pins'); // блок в котром будут отображены сгенерированные элементы
-  var lastTimeout = null;
+  var MARKER_LOCATION_X = 4;
+  var MARKER_LOCATION_Y = 40;
+  var LOW_PRICE = 10000;
+  var HIGH_PRICE = 50000;
 
+  var map = document.querySelector('.map');
+  var mapPin = document.querySelectorAll('.map__pin');
+  var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPinsCard = document.querySelector('.map__pins');
   var filterForm = document.querySelector('.map__filters');
   var filterType = filterForm.querySelector('#housing-type');
   var filterPrice = filterForm.querySelector('#housing-price');
   var filterRooms = filterForm.querySelector('#housing-rooms');
   var filterGuests = filterForm.querySelector('#housing-guests');
-  var featuresFieldset = filterForm.querySelector('#housing-features');
+  var featuresFieldSet = filterForm.querySelector('#housing-features');
+  var lastTimeout = null;
 
-  // Активируем метки
+  // Границы перемещения метки
+  var dragPinLimits = {
+    minX: 50,
+    maxX: map.clientWidth - 100,
+    minY: COORDS_LIMIT.top - MAP_PIN_SIZE.height / 2,
+    maxY: COORDS_LIMIT.bottom - MAP_PIN_SIZE.height / 2
+  };
+
   var makeActive = function (elements, isActive) {
     for (var i = 0; i < elements.length; i++) {
       if (isActive) {
@@ -39,11 +49,12 @@
       }
     }
   };
+
   // Активируем метки
   var onPinBind = function (marker, offer) {
     makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     makeActive(marker, true);
-    window.showCard.removeCard();
+    window.showCard.pinPopupClickHandler();
     window.showCard.showCard(offer);
   };
 
@@ -53,25 +64,26 @@
     });
   };
 
-  // Функция создающая метки
-  function renderMapPins(pinsList) {
+  // Функция отрисовки меток на карте
+  var renderMapPins = function (pinsList) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < pinsList.legth && i < PINS_LIMIT; i++) {
+    for (var i = 0; i < pinsList.length && i < PINS_LIMIT; i++) {
       var pin = pinsList[i];
       var marker = document.createElement('button');
-      marker.style.left = pin.location.x - 4 + 'px';
-      marker.style.top = pin.location.y - 40 + 'px';
+      marker.style.left = pin.location.x - MARKER_LOCATION_X + 'px';
+      marker.style.top = pin.location.y - MARKER_LOCATION_Y + 'px';
       marker.className = 'map__pin';
-      marker.innerHTML = '<img src = "' + pin.author.avatar + '" width="40" height="40" draggable="flase">';
+      marker.innerHTML = '<img src = "' + pin.author.avatar + '" width="40" height="40" draggable="false">';
       pinBind(marker, pin);
       fragment.appendChild(marker);
     }
     mapPinsCard.appendChild(fragment);
-  }
+  };
 
-  function mapPinMainHandle(evt) {
+  var mapPinMainHandle = function (evt) {
     evt.preventDefault();
-    // Начальные координаты курсора
+
+    // Исходные координаты курсора
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -79,8 +91,9 @@
 
     var shift = {};
     var markerCoords = {};
+
     // Функция перемещения метки
-    function onMouseMove(move) {
+    var onMouseMove = function (move) {
       move.preventDefault();
 
       shift = {
@@ -88,14 +101,7 @@
         y: startCoords.y - move.clientY
       };
 
-      var dragPinLimits = {
-        minX: 50,
-        maxX: map.clientWidth - 100,
-        minY: COORDS_LIMIT.top - MAP_PIN_SIZE.height / 2,
-        maxY: COORDS_LIMIT.bottom - MAP_PIN_SIZE.height / 2
-      };
-
-      // Координаты остановки метки
+      // Координаты положения метки
       startCoords = {
         x: move.clientX,
         y: move.clientY
@@ -113,96 +119,104 @@
       markerCoords.y = (markerCoords.y > dragPinLimits.maxY - MAIN_PIN_TOP_OFFSET) ? dragPinLimits.maxY - MAIN_PIN_TOP_OFFSET : markerCoords.y;
       mapPinMain.style.left = markerCoords.x + 'px';
       mapPinMain.style.top = markerCoords.y + 'px';
-    }
+    };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      window.address = document.querySelector('#address');
-      window.address.value = 'x: ' + parseInt(mapPinMain.offsetLeft, 10) + ', ' + 'y: ' + (parseInt(mapPinMain.offsetTop, 10) + MAP_PIN_SIZE.height / 2);
+      var address = document.querySelector('#address');
+      address.value = 'x: ' + parseInt(mapPinMain.offsetLeft, 10) + ', ' + 'y: ' + (parseInt(mapPinMain.offsetTop, 10) + MAP_PIN_SIZE.height / 2);
       window.map.init();
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
+  };
+
   mapPinMain.addEventListener('mousedown', mapPinMainHandle);
 
   // Удаляем пины
   var removePins = function () {
     var pins = mapPinsCard.querySelectorAll('.map__pin:not(.map__pin--main)');
-    window.showCard.removeCard();
-    pins.forEach(function (e) {
-      e.remove();
-    });
+    window.showCard.pinPopupClickHandler();
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+    }
   };
 
-  function debounce(callback, timeout) {
+  var debounce = function (callback, timeout) {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
     }
     lastTimeout = window.setTimeout(callback, timeout);
-  }
+  };
 
-  function filterByType(offer, filter) {
-    return filter.type === offer.type;
-  }
+  // Блок с фильтрами
+  var filterByType = function (offer, filter) {
+    return (filter.type === offer.offer.type);
+  };
 
-  function filterByPrice(offer, filter) {
+  var filterByPrice = function (offer, filter) {
     var result = true;
     switch (filter.price) {
       case 'middle':
-        if (offer.price < 10000 || offer.price > 50000) {
+        if (offer.offer.price < LOW_PRICE || offer.offer.price > HIGH_PRICE) {
+          result = false;
+        }
+        break;
+      case 'low':
+        if (offer.offer.price > LOW_PRICE) {
           result = false;
         }
         break;
       case 'high':
-        if (offer.price < 50000) {
+        if (offer.offer.price < HIGH_PRICE) {
           result = false;
         }
         break;
     }
     return result;
-  }
+  };
 
-  function filterByRooms(offer, filter) {
-    return (parseInt(filter.rooms, 10) === parseInt(offer.rooms, 10));
-  }
+  var filterByRooms = function (offer, filter) {
+    return (parseInt(filter.rooms, 10) === parseInt(offer.offer.rooms, 10));
+  };
 
-  function filterByGuests(offer, filter) {
-    return (parseInt(filter.guests, 10) === parseInt(offer.guests, 10));
-  }
+  var filterByGuests = function (offer, filter) {
+    return (parseInt(filter.guests, 10) === parseInt(offer.offer.guests, 10));
+  };
 
-  function filterByFeatures(offer, filter) {
+  var filterByFeatures = function (offer, filter) {
     var result = true;
     filter.features.forEach(function (feature) {
-      if (offer.features.indexOf(feature) < 0) {
+      if (offer.offer.features.indexOf(feature) < 0) {
         result = false;
       }
     });
     return result;
-  }
+  };
 
   filterForm.addEventListener('change', function () {
+
+    var filters = {
+      'type': filterType.value,
+      'price': filterPrice.value,
+      'rooms': filterRooms.value,
+      'guests': filterGuests.value,
+      'features': []
+    };
+
+    var offers = window.data.flats;
+    var filtredOffers = offers;
+
     debounce(function () {
       removePins();
 
-      var filters = {
-        'type': filterType.value,
-        'price': filterPrice.value,
-        'rooms': filterRooms.value,
-        'guests': filterGuests.value,
-        'features': []
-      };
-
-      var selectedFeatures = featuresFieldset.querySelectorAll('input[type=checkbox]:checked');
+      var selectedFeatures = featuresFieldSet.querySelectorAll('input[type=checkbox]:checked');
       selectedFeatures.forEach(function (feature) {
         filters.features.push(feature.value);
       });
-
-      var offers = window.data.flats;
-      var filtredOffers = offers;
 
       if (filters.type !== 'any') {
         filtredOffers = filtredOffers.filter(function (offer) {
@@ -241,9 +255,7 @@
   window.pin = {
     renderMapPins: renderMapPins,
     makeActive: makeActive,
-    mapPin: mapPin,
-    map: map,
-    mapPinsCard: mapPinsCard
+    mapPin: mapPin
   };
 
 })();
